@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('job_title');
-            $table->text('address');
-            $table->string('phone');
+            $table->string('firstName');
+            $table->string('lastName');
+            $table->string('jobTitle')->nullable();
+            $table->text('address')->nullable();
+            $table->string('phone')->nullable();
             $table->string('email')->unique();
-            $table->string('theme_color');
-            $table->text('summary');
+            $table->string('themeColor')->default('#ff6666');
+            $table->text('summary')->nullable();
             $table->timestamps();
         });
 

@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,12 @@ class UserController extends Controller
         return User::with(['experiences', 'educations', 'skills'])->get();
     }
 
-    public function store(Request $request)
-    {
+    public function store(StoreUserRequest  $request)
+    {          
+   
         $user = User::create($request->all());
-
+        $token = $user->createToken('api_token')->plainTextToken;
+        $user->api_token = $token;
         return response()->json($user, 201);
     }
 
@@ -28,6 +31,11 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $request->validate([
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ]);
         $user->update($request->all());
 
         return response()->json($user, 200);

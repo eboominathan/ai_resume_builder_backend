@@ -9,7 +9,7 @@ use App\Http\Controllers\SkillController;
  
 
 
-Route::apiResource('user-resumes', UserController::class);
+Route::apiResource('users', UserController::class);
 Route::apiResource('users.experiences', ExperienceController::class);
 Route::apiResource('users.educations', EducationController::class);
 Route::apiResource('users.skills', SkillController::class);
