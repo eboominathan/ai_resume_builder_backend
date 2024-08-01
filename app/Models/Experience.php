@@ -22,8 +22,8 @@ class Experience extends Model
         'work_summary'
     ];
 
-    public function user()
+    public function resume()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Resume::class);
     }
 }

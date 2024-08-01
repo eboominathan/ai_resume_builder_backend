@@ -18,8 +18,8 @@ class Education extends Model
         'description'
     ];
 
-    public function user()
+    public function resume()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Resume::class);
     }
 }

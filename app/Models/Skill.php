@@ -14,8 +14,8 @@ class Skill extends Model
         'rating'
     ];
 
-    public function user()
+    public function resume()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Resume::class);
     }
 }

@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return User::with(['experiences', 'educations', 'skills'])->get();
+        return User::get();
     }
 
     public function store(StoreUserRequest  $request)

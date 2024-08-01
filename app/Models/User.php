@@ -12,26 +12,6 @@ class User extends Model
     protected $fillable = [
         'firstName',
         'lastName',
-        'jobTitle',
-        'address',
-        'phone',
-        'email',
-        'themeColor',
-        'summary'
-    ];
-
-    public function experiences()
-    {
-        return $this->hasMany(Experience::class);
-    }
-
-    public function educations()
-    {
-        return $this->hasMany(Education::class);
-    }
-
-    public function skills()
-    {
-        return $this->hasMany(Skill::class);
-    }
+       'email',       
+    ];   
 }
