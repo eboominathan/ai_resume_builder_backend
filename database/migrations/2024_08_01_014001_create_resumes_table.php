@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('resumes', function (Blueprint $table) {
             $table->id();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('resumeId')->nullable();
+            $table->string('title')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('theme_color')->default('#ff6666');
+            $table->text('summary')->nullable();
             $table->timestamps();
         });
     }

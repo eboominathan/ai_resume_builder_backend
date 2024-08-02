@@ -7,4 +7,4 @@ use App\Http\Controllers\UserController;
 
 
 Route::apiResource('users', UserController::class);
-Route::apiResource('resumes', ResumeController::class);
+Route::apiResource('user-resumes', ResumeController::class);

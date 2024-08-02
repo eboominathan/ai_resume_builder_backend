@@ -10,7 +10,7 @@ class Resume extends Model
     use HasFactory;
 
     protected $fillable = [
-        'first_name', 'last_name', 'job_title', 'address', 'phone', 'email', 'theme_color', 'summary'
+        'first_name', 'last_name', 'resumeId','job_title', 'address', 'phone', 'email', 'theme_color', 'summary'
     ];
 
     public function experiences()

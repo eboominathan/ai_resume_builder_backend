@@ -14,10 +14,25 @@ class ResumeController extends Controller
 
     public function store(Request $request)
     {
-        $resume = Resume::create($request->all());
-        $resume->experiences()->createMany($request->experiences);
-        $resume->educations()->createMany($request->educations);
-        $resume->skills()->createMany($request->skills);
+        $name = explode(' ',$request->userName);
+            $data = [
+            'resumeId' => $request->resumeId, 
+            'title' => $request->title,
+            'email' => $request->userEmail,
+            'first_name' =>  $name[0],
+            'last_name' =>  $name[1],
+            ]; 
+
+        $resume = Resume::create($data);
+        if(!empty($request->experiences)){
+            $resume->experiences()->createMany($request->experiences);
+        }
+        if(!empty($request->educations)){
+            $resume->educations()->createMany($request->educations);
+        }
+        if(!empty($request->skills)){
+            $resume->skills()->createMany($request->skills);
+        }     
         return response()->json($resume->load(['experiences', 'educations', 'skills']), 201);
     }
 

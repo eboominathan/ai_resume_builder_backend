@@ -15,10 +15,12 @@ class UserController extends Controller
         return User::get();
     }
 
-    public function store(StoreUserRequest  $request)
+    public function store(Request  $request)
     {          
-   
-        $user = User::create($request->all());
+        $user = User::where(['email'=>$request->email])->first();    
+        if(empty($user)){
+            $user = User::create($request->all());
+        }
         $token = $user->createToken('api_token')->plainTextToken;
         $user->api_token = $token;
         return response()->json($user, 201);
