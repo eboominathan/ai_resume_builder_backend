@@ -2,8 +2,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "vite build"
+        "build": "npm run production",
+        "preinstall": "sh install-composer.sh",
+        "postinstall": "composer install && npm install"
     },
     "devDependencies": {
         "axios": "^1.6.4",

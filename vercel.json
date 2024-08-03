@@ -2,17 +2,23 @@
     "version": 2,
     "builds": [
       {
-        "src": "public/index.php",
-        "use": "@vercel/static-build"
-      },
-      {
-        "src": "api/**/*.js",
+        "src": "package.json",
         "use": "@vercel/node"
       }
     ],
+    "build": {
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "commands": {
+        "preinstall": "sh install-composer.sh",
+        "install": "composer install && npm install",
+        "build": "npm run production"
+      }
+    },
     "routes": [
-      { "src": "/(.*)", "dest": "public/index.php" },
-      { "src": "/api/(.*)", "dest": "/api/$1" }
+      { "src": "/api/(.*)", "dest": "/api/$1" },
+      { "src": "/(.*)", "dest": "/public/index.php" }
     ]
   }
   
