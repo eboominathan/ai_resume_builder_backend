@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Resume;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ResumeController extends Controller
 {
@@ -43,17 +44,24 @@ class ResumeController extends Controller
 
     public function update(Request $request, $id)
     {
+      
         $resume = Resume::findOrFail($id);
         $resume->update($request->all());
-
+       
         // Update or create experiences, educations, skills
+        if(!empty($request->experiences)){
         $resume->experiences()->delete();
-        $resume->educations()->delete();
-        $resume->skills()->delete();
-        
         $resume->experiences()->createMany($request->experiences);
-        $resume->educations()->createMany($request->educations);
-        $resume->skills()->createMany($request->skills);
+        }
+        if(!empty($request->educations)){
+            $resume->educations()->delete();
+            $resume->educations()->createMany($request->educations);
+        }
+        if(!empty($request->skills)){
+            $resume->skills()->delete();
+            $resume->skills()->createMany($request->skills);
+        }
+        
         
         return response()->json($resume->load(['experiences', 'educations', 'skills']), 200);
     }
