@@ -11,5 +11,8 @@ class CustomerDetails extends Model
     protected $table = 'customer_details';
     protected $guarded = ['id'];
 
+    public function family(){
+        return $this->hasMany(FamilyDetails::class,'customer_id','id');
+    }
 
 }

@@ -46,7 +46,7 @@ class CustomerController extends Controller
 
     public function show($id)
     {
-        return CustomerDetails::with([])->findOrFail($id);
+        return CustomerDetails::with(['family'])->findOrFail($id);
     }
 
     public function update(Request $request, $id)
