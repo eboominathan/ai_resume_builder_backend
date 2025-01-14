@@ -11,5 +11,9 @@ class FamilyDetails extends Model
     protected $table = 'family_details';
     protected $guarded = ['id'];
     
+    public function getPhotoAttribute($value)
+    {
+        return $value ? asset('storage/' . $value) : asset('storage/profile.svg');
+    }
 
 }
