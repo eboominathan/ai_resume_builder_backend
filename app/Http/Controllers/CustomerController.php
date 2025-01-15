@@ -19,19 +19,16 @@ class CustomerController extends Controller
     // Validate the incoming request
     $validated = $request->validate([
         'customerId' => 'required',
-        'title' => 'required|string|max:255',
-        'userName' => 'required|string|max:255',
-        'userEmail' => 'required|email|max:255',
+        'title' => 'required|string|max:255'  
     ]);
 
     // Split the userName into first and last names
-    $name = explode(' ', $validated['userName'], 2);
+    $name = explode(' ', $validated['title'], 2);
 
     // Prepare the data for insertion
     $data = [
         'customer_id' => $validated['customerId'], // Assuming 'customer_id' matches the DB column
-        'title' => $validated['title'],
-        'email' => $validated['userEmail'],
+        'title' => $validated['title'],        
         'first_name' => $name[0], // Use first part as 'first_name'
         'last_name' => $name[1] ?? '', // Handle cases where last_name is missing
     ];
@@ -62,5 +59,22 @@ class CustomerController extends Controller
         $customers = CustomerDetails::findOrFail($id);
         $customers->delete();
         return response()->json(null, 204);
+    }
+
+    public function getStreetNames(Request $request)
+    {
+        $query = $request->input('query'); // Get the search query from request
+        $field = $request->input('field'); // Get the search query from request
+
+        if (!$query) {
+            return response()->json([], 200); // Return empty array if no query is provided
+        }
+
+        // Fetch matching street names from the database (case-insensitive)
+        $streets = CustomerDetails::where($field , 'LIKE', '%' . $query . '%')
+            ->limit(10) // Limit to 10 results
+            ->pluck($field ); // Get only the 'name' column
+
+        return response()->json($streets, 200); // Return the suggestions as JSON
     }
 }
