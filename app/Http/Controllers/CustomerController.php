@@ -11,7 +11,23 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        return CustomerDetails::all();
+        $customers = CustomerDetails::all();
+    
+        if ($customers->isNotEmpty()) { // Check if the collection is not empty
+            foreach ($customers as $customer) {
+                $customer->photo = asset('storage/profile.svg');
+                if (!empty($customer->family)) { // Check if family exists
+                    foreach ($customer->family as $familyMember) {
+                        if ($familyMember->relationship === 'Family Head') { // Check relationship
+                            $customer->photo = $familyMember->photo; // Set photo for Family Head
+                            break; // Exit loop as we found the Family Head
+                        }
+                    }
+                }
+            }
+        }
+    
+        return $customers; // Return the modified result
     }
 
     public function store(Request $request)
@@ -77,4 +93,48 @@ class CustomerController extends Controller
 
         return response()->json($streets, 200); // Return the suggestions as JSON
     }
+    public function getCustomer(Request $request)
+{
+    $query = trim($request->input('query')); // Trim whitespace from the query
+
+    // If no query is provided, return an empty array with a 200 response
+    if (empty($query)) {
+        return response()->json([], 200);
+    }
+
+    // Search customers using various fields with case-insensitive matching
+    $customers = CustomerDetails::where('first_name', 'LIKE', '%' . $query . '%')
+        ->orWhere('last_name', 'LIKE', '%' . $query . '%')
+        ->orWhere('email', 'LIKE', '%' . $query . '%')
+        ->orWhere('phone', 'LIKE', '%' . $query . '%')
+        ->orWhere('street', 'LIKE', '%' . $query . '%')
+        ->orWhere('village', 'LIKE', '%' . $query . '%')
+        ->orWhere('district', 'LIKE', '%' . $query . '%')
+        ->orWhere('state', 'LIKE', '%' . $query . '%')
+        ->limit(10) // Limit results to 10
+        ->get();
+
+    // If no customers are found, return an empty array
+    if ($customers->isEmpty()) {
+        return response()->json([], 200);
+    }
+
+    if ($customers->isNotEmpty()) { // Check if the collection is not empty
+        foreach ($customers as $customer) {
+            $customer->photo = asset('storage/profile.svg');
+            if (!empty($customer->family)) { // Check if family exists
+                foreach ($customer->family as $familyMember) {
+                    if ($familyMember->relationship === 'Family Head') { // Check relationship
+                        $customer->photo = $familyMember->photo; // Set photo for Family Head
+                        break; // Exit loop as we found the Family Head
+                    }
+                }
+            }
+        }
+    }
+
+    // Return the matching customers
+    return response()->json($customers, 200);
+}
+
 }
