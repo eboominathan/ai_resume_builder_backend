@@ -9,26 +9,30 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
-    public function index()
-    {
-        $customers = CustomerDetails::all();
-    
-        if ($customers->isNotEmpty()) { // Check if the collection is not empty
-            foreach ($customers as $customer) {
-                $customer->photo = asset('storage/profile.svg');
-                if (!empty($customer->family)) { // Check if family exists
-                    foreach ($customer->family as $familyMember) {
-                        if ($familyMember->relationship === 'Family Head') { // Check relationship
-                            $customer->photo = $familyMember->photo; // Set photo for Family Head
-                            break; // Exit loop as we found the Family Head
-                        }
+   // Backend code update with pagination
+public function index(Request $request)
+{
+    $perPage = $request->input('per_page', 10); // Default to 10 items per page
+    $page = $request->input('page', 1);
+
+    $customers = CustomerDetails::paginate($perPage, ['*'], 'page', $page);
+
+    if ($customers->isNotEmpty()) {
+        foreach ($customers as $customer) {
+            $customer->photo = asset('storage/profile.svg');
+            if (!empty($customer->family)) {
+                foreach ($customer->family as $familyMember) {
+                    if ($familyMember->relationship === 'Family Head') {
+                        $customer->photo = $familyMember->photo;
+                        break;
                     }
                 }
             }
         }
-    
-        return $customers; // Return the modified result
     }
+
+    return $customers; // Returns a paginated response
+}
 
     public function store(Request $request)
 {
@@ -95,14 +99,21 @@ class CustomerController extends Controller
     }
     public function getCustomer(Request $request)
 {
-    $query = trim($request->input('query')); // Trim whitespace from the query
+    $perPage = $request->input('per_page', 10); // Default to 10 items per page
+    $page = $request->input('page', 1);
+    $query = trim($request->input('query', '')); // Trim whitespace and set default to empty string
 
-    // If no query is provided, return an empty array with a 200 response
+    // If no query is provided, return paginated empty data
     if (empty($query)) {
-        return response()->json([], 200);
+        return response()->json([
+            'data' => [],
+            'current_page' => $page,
+            'last_page' => 0,
+            'total' => 0
+        ], 200);
     }
 
-    // Search customers using various fields with case-insensitive matching
+    // Perform the search with case-insensitive matching on multiple fields
     $customers = CustomerDetails::where('first_name', 'LIKE', '%' . $query . '%')
         ->orWhere('last_name', 'LIKE', '%' . $query . '%')
         ->orWhere('email', 'LIKE', '%' . $query . '%')
@@ -111,30 +122,28 @@ class CustomerController extends Controller
         ->orWhere('village', 'LIKE', '%' . $query . '%')
         ->orWhere('district', 'LIKE', '%' . $query . '%')
         ->orWhere('state', 'LIKE', '%' . $query . '%')
-        ->limit(10) // Limit results to 10
-        ->get();
+        ->paginate($perPage, ['*'], 'page', $page);
 
-    // If no customers are found, return an empty array
-    if ($customers->isEmpty()) {
-        return response()->json([], 200);
-    }
+    // Add photo for each customer
+    $customers->getCollection()->transform(function ($customer) {
+        $customer->photo = asset('storage/profile.svg'); // Default photo
 
-    if ($customers->isNotEmpty()) { // Check if the collection is not empty
-        foreach ($customers as $customer) {
-            $customer->photo = asset('storage/profile.svg');
-            if (!empty($customer->family)) { // Check if family exists
-                foreach ($customer->family as $familyMember) {
-                    if ($familyMember->relationship === 'Family Head') { // Check relationship
-                        $customer->photo = $familyMember->photo; // Set photo for Family Head
-                        break; // Exit loop as we found the Family Head
-                    }
+        // Check if the customer has a family and find the "Family Head"
+        if (!empty($customer->family)) {
+            foreach ($customer->family as $familyMember) {
+                if ($familyMember->relationship === 'Family Head') {
+                    $customer->photo = $familyMember->photo; // Use Family Head's photo
+                    break; // Exit loop as Family Head is found
                 }
             }
         }
-    }
 
-    // Return the matching customers
+        return $customer;
+    });
+
+    // Return the paginated result
     return response()->json($customers, 200);
 }
+
 
 }
