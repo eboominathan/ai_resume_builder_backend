@@ -81,7 +81,7 @@ public function index(Request $request)
         return response()->json(null, 204);
     }
 
-    public function getStreetNames(Request $request)
+    public function getAutocomplete(Request $request)
     {
         $query = $request->input('query'); // Get the search query from request
         $field = $request->input('field'); // Get the search query from request
@@ -93,6 +93,7 @@ public function index(Request $request)
         // Fetch matching street names from the database (case-insensitive)
         $streets = CustomerDetails::where($field , 'LIKE', '%' . $query . '%')
             ->limit(10) // Limit to 10 results
+            ->groupBy($field ) // Group by the 'name' column
             ->pluck($field ); // Get only the 'name' column
 
         return response()->json($streets, 200); // Return the suggestions as JSON
