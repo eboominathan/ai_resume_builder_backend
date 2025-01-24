@@ -35,8 +35,7 @@ class EarningController extends Controller
         // Validate and store the earning
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'required|exists:sub_categories,id',
-            'service_id' => 'nullable|exists:services,id',
+            'sub_category_id' => 'required|exists:sub_categories,id',            
             'description' => 'nullable|string',
             'customer_id' => 'nullable|exists:customers,id',
             'customer_name' => 'nullable|string',

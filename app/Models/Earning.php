@@ -16,8 +16,7 @@ class Earning extends Model
     // Mass assignable attributes
     protected $fillable = [
         'category_id',
-        'sub_category_id',
-        'service_id',
+        'sub_category_id',        
         'description',
         'customer_id',
         'customer_name',

@@ -17,14 +17,12 @@ return new class extends Migration
             // Foreign keys with cascading delete
             $table->foreignId('category_id')
                 ->constrained('categories') // References 'id' in 'categories' table
-                ->onDelete('cascade');
+                ->onDelete('restrict');
 
             $table->foreignId('sub_category_id')
                 ->constrained('sub_categories') // References 'id' in 'sub_categories' table
-                ->onDelete('cascade');
-
-            // Service details
-            $table->string('service_id')->nullable();
+                ->onDelete('restrict');
+                        
             $table->string('description')->nullable();
             $table->string('customer_id')->nullable();
             $table->string('customer_name')->nullable();
