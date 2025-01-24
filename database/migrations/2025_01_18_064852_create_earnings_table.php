@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('earnings', function (Blueprint $table) {
             $table->id();
 
             // Foreign keys with cascading delete
@@ -24,7 +24,11 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             // Service details
+            $table->string('service_id')->nullable();
             $table->string('description')->nullable();
+            $table->string('customer_id')->nullable();
+            $table->string('customer_name')->nullable();
+            $table->string('location')->nullable();
             $table->decimal('amount', 10, 2)->nullable()->comment('Total amount for the service');
 
             // Enum for payment status
@@ -46,6 +50,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('earnings');
     }
 };

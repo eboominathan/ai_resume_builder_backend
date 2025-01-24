@@ -12,10 +12,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        // Fetch all services with category and subcategory relationships
-        $services = Service::with(['category', 'subCategory'])->get();
-
-        return response()->json($services);
+        //
     }
 
     /**
@@ -23,8 +20,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        // If needed for web (not used in APIs)
-        return view('services.create');
+        //
     }
 
     /**
@@ -32,19 +28,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate and store the service
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'required|exists:sub_categories,id',
-            'description' => 'nullable|string',
-            'amount' => 'nullable|numeric',
-            'payment_status' => 'required|in:paid,pending,partially paid,Not Paid',
-            'comments' => 'nullable|string',
-        ]);
-
-        $service = Service::create($validated);
-
-        return response()->json($service, 201);
+        //
     }
 
     /**
@@ -52,7 +36,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return response()->json($service->load(['category', 'subCategory']));
+        //
     }
 
     /**
@@ -60,8 +44,7 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        // If needed for web (not used in APIs)
-        return view('services.edit', compact('service'));
+        //
     }
 
     /**
@@ -69,19 +52,7 @@ class ServiceController extends Controller
      */
     public function update(Request $request, Service $service)
     {
-        // Validate and update the service
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'required|exists:sub_categories,id',
-            'description' => 'nullable|string',
-            'amount' => 'nullable|numeric',
-            'payment_status' => 'required|in:paid,pending,partially paid,Not Paid',
-            'comments' => 'nullable|string',
-        ]);
-
-        $service->update($validated);
-
-        return response()->json($service);
+        //
     }
 
     /**
@@ -89,9 +60,6 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service)
     {
-        $service->delete();
-
-        return response()->json(['message' => 'Service deleted successfully.']);
+        //
     }
 }
-
