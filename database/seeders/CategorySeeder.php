@@ -15,6 +15,15 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        // Disable foreign key checks to avoid constraint violations
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Clear the categories table
+        DB::table('categories')->truncate(); // Resets auto-increment
+
+        // Enable foreign key checks again
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $categories = [
             'Voter Id',
             'Aadhar',
