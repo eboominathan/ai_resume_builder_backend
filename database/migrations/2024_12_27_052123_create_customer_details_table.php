@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('customerId')->nullable();
             $table->string('title')->nullable();
             $table->string('door_no')->nullable();
-            $table->string('street')->nullable();
+            $table->integer('street')->nullable();
             $table->string('landmark')->nullable();
-            $table->string('area')->nullable();
-            $table->string('village')->nullable();
+            $table->integer('area')->nullable();
+            $table->integer('village')->nullable();
             $table->string('district')->nullable();
             $table->string('pincode')->nullable();
             $table->string('state')->nullable();
