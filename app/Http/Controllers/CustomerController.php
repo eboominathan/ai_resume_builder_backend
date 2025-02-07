@@ -100,6 +100,7 @@ public function index(Request $request)
     }
     public function getCustomer(Request $request)
 {
+   
     $perPage = $request->input('per_page', 10); // Default to 10 items per page
     $page = $request->input('page', 1);
     $query = trim($request->input('query', '')); // Trim whitespace and set default to empty string
